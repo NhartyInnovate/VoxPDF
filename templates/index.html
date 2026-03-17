@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% set title = "AudioFlow — PDF to Speech" %}
+
+{% block page %}
+<nav class="navbar navbar-expand-lg navbar-dark audio-navbar py-3">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{{ url_for('home') }}">
+      <span class="brand-icon">🎙</span>
+      <span>AudioFlow</span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+       <!-- <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link" href="#converter">Converter</a></li>
+        <li class="nav-item"><a class="nav-link" href="#recent">Recent</a></li>-->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="audio-page">
+  <div class="bg-orb orb-one"></div>
+  <div class="bg-orb orb-two"></div>
+
+  <section class="hero-section text-center">
+    <div class="container">
+      <h1 class="hero-title">Turn Your PDF Into Audio</h1>
+      <p class="hero-subtitle mx-auto">
+        Experience seamless document listening with a clean PDF-to-speech workflow.
+        Perfect for students, professionals, and readers on the go.
+      </p>
+    </div>
+  </section>
+
+  <section id="converter" class="converter-section">
+    <div class="container">
+      <div class="converter-shell mx-auto">
+        <form method="POST" enctype="multipart/form-data" id="pdfForm">
+          <div class="upload-panel text-center" id="dropZone">
+            <div class="upload-icon">☁</div>
+            <h3 class="upload-title">Drop your PDF here</h3>
+            <p class="upload-subtitle">or click below to choose a file</p>
+
+            <input
+              type="file"
+              name="pdf_file"
+              id="pdf_file"
+              class="d-none"
+              accept=".pdf"
+              required
+            >
+
+            <label for="pdf_file" class="btn btn-upload mt-2">Choose File</label>
+
+            <div id="fileNamePreview" class="file-name-preview mt-3">
+              No file selected
+            </div>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-md-4">
+              <label class="form-label form-label-dark">Language</label>
+              <select name="language" class="form-select audio-select">
+                {% for language in languages %}
+                  <option value="{{ language }}">{{ language }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label form-label-dark">Reading Speed</label>
+              <select name="speed" class="form-select audio-select">
+                <option value="normal" selected>Normal (1.0x)</option>
+                <option value="slow">Slow</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label form-label-dark">Voice Variant</label>
+              <select name="voice_variant" class="form-select audio-select">
+                {% for variant in voice_variants %}
+                  <option value="{{ variant }}">{{ variant }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-convert w-100 mt-4">
+            Convert to Speech ✨
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!--<section id="features" class="features-section py-4">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card-dark">
+            <h5>Fast Conversion</h5>
+            <p>Upload a PDF and convert it into downloadable speech parts in a few clicks.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card-dark">
+            <h5>Flexible Listening</h5>
+            <p>Choose language, speed, and accent variant to suit your listening preference.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card-dark">
+            <h5>Free Workflow</h5>
+            <p>A simple and practical way to turn reading material into audio without paid TTS APIs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recent" class="recent-section pb-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="recent-title mb-0">Recent Conversions</h4>
+        <a href="#" class="recent-link">View All</a>
+      </div>
+
+      <div class="recent-list">
+        <div class="recent-item">
+          <div class="recent-meta d-flex align-items-center gap-3">
+            <div class="recent-file-icon red">📄</div>
+            <div>
+              <h6 class="mb-1">Q3_Strategic_Report.pdf</h6>
+              <small>32.4 MB • 45 MINUTES AUDIO</small>
+            </div>
+          </div>
+          <button class="btn btn-recent" type="button">Download ZIP</button>
+        </div>
+
+        <div class="recent-item">
+          <div class="recent-meta d-flex align-items-center gap-3">
+            <div class="recent-file-icon blue">📘</div>
+            <div>
+              <h6 class="mb-1">The_Great_Gatsby_Chapter1.pdf</h6>
+              <small>2.1 MB • 18 MINUTES AUDIO</small>
+            </div>
+          </div>
+          <button class="btn btn-recent" type="button">Download ZIP</button>
+        </div>
+      </div>
+    </div>
+  </section>-->
+</main>
+
+<div id="loadingOverlay" class="loading-overlay d-none">
+  <div class="loading-card text-center">
+    <div class="loading-spinner mb-3"></div>
+    <h4 class="mb-2">Converting your PDF...</h4>
+    <p class="mb-3">Please wait while we generate your audio files.</p>
+
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const form = document.getElementById("pdfForm");
+  const loadingOverlay = document.getElementById("loadingOverlay");
+  const fileInput = document.getElementById("pdf_file");
+  const fileNamePreview = document.getElementById("fileNamePreview");
+  const dropZone = document.getElementById("dropZone");
+
+  function updateFilePreview() {
+    fileNamePreview.textContent = fileInput.files.length
+      ? fileInput.files[0].name
+      : "No file selected";
+  }
+
+  fileInput.addEventListener("change", updateFilePreview);
+
+  ["dragenter", "dragover"].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.add("drag-active");
+    });
+  });
+
+  ["dragleave", "drop"].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.remove("drag-active");
+    });
+  });
+
+  dropZone.addEventListener("drop", (e) => {
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInput.files = files;
+      updateFilePreview();
+    }
+  });
+
+  form.addEventListener("submit", function () {
+    loadingOverlay.classList.remove("d-none");
+  });
+</script>
+{% endblock %}
